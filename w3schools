@@ -1,0 +1,95 @@
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+public class w3school {
+
+    WebDriver driver;
+
+
+
+    @BeforeTest
+    public void beforeTest() {
+        System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().deleteAllCookies();
+        driver.manage().window().maximize();
+
+    }
+
+    @AfterTest
+    public void afterTest() {
+        driver.manage().deleteAllCookies();
+        driver.close();
+    }
+
+
+    @Test(priority = 1)
+    public void test() throws InterruptedException {
+        //scrollowanie
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        driver.get("https://w3schools.com");
+        WebElement XpathLink = driver.findElement(By.linkText("Learn XPath"));
+
+        js.executeScript("arguments[0].scrollIntoView();", XpathLink);
+        String text1 = XpathLink.getText();
+        //wyszukiwarka google
+        driver.findElement(By.xpath("//div[@class='w3-right']//a[1]//i[1]")).click();
+        driver.findElement(By.id("gsc-i-id1")).sendKeys(text1);
+        driver.findElement(By.xpath("//button[@class='gsc-search-button gsc-search-button-v2']")).click();
+        driver.findElement(By.xpath("//body[contains(@class,'gsc-overflow-hidden')]/div[@id='googleSearch']/div[@id='___gcse_0']/div[@class='gsc-control-cse gsc-control-cse-en']/div[@class='gsc-control-wrapper-cse']/div[@class='gsc-results-wrapper-overlay gsc-results-wrapper-visible']/div[@class='gsc-wrapper']/div[@class='gsc-resultsbox-visible']/div[@class='gsc-resultsRoot gsc-tabData gsc-tabdActive']/div[@class='gsc-results gsc-webResult']/div[@class='gsc-expansionArea']/div[1]/div[1]/div[1]/div[1]/a[1]")).click();
+        //zamknięcie zakładki
+        ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tabs2.get(0));
+        driver.close();
+        driver.switchTo().window(tabs2.get(1));
+
+        Thread.sleep(3000);
+
+        String actualLink = driver.getCurrentUrl();
+        Assert.assertEquals(actualLink, "https://www.w3schools.com/xml/xpath_intro.asp" );
+        //klikanie next
+        driver.findElement(By.xpath("//div[@id='main']//div[2]//a[2]")).click();
+        driver.findElement(By.xpath("/html[1]/body[1]/div[6]/div[1]/div[1]/div[2]/a[2]")).click();
+        driver.findElement(By.xpath("/html[1]/body[1]/div[6]/div[1]/div[1]/div[2]/a[2]")).click();
+        String nazwaLinku = driver.findElement(By.xpath("/html[1]/body[1]/div[5]/div[1]/div[1]/a[52]")).getText();
+        System.out.println("Nazwa podswietlonego linku to "+nazwaLinku);
+
+ }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
